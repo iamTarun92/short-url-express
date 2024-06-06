@@ -6,23 +6,34 @@ async function handelGenerateShortUrl(req, res) {
   if (!url) {
     return res.status(400).json({ error: "url is required" });
   }
-  // Dynamically import nanoid
-  const { nanoid } = await import("nanoid");
-  const shortId = nanoid();
-  const shortUrl = `${req.protocol}://${req.get("host")}/url/${shortId}`;
 
-  const entry = new URL({
-    shortId,
-    shortUrl,
-    redirectUrl: url,
-    visitHistory: [],
-  });
+  try {
+    // Dynamically import nanoid
+    const { nanoid } = await import("nanoid");
+    const shortId = nanoid();
+    const shortUrl = `${req.protocol}://${req.get("host")}/url/${shortId}`;
 
-  await entry
-    .save()
-    .then((url) => res.status(201).json({ shortUrl }))
-    .catch((err) => res.status(400).json({ error: "Unable to add this url." }));
+    const entry = new URL({
+      shortId,
+      shortUrl,
+      redirectUrl: url,
+      visitHistory: [],
+    });
+
+    await entry.save();
+
+    const allURL = await URL.find();
+
+    return res.render("index", {
+      shortUrl,
+      allURL,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({ error: "Unable to add this url." });
+  }
 }
+
 
 async function handelRedirectShortUrl(req, res) {
   try {
