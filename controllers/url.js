@@ -1,9 +1,9 @@
 const URL = require("../models/url");
 
 async function handelGenerateShortUrl(req, res) {
-  const { url } = req.body;
+  const { longUrl } = req.body;
 
-  if (!url) {
+  if (!longUrl) {
     return res.status(400).json({ error: "url is required" });
   }
 
@@ -11,29 +11,22 @@ async function handelGenerateShortUrl(req, res) {
     // Dynamically import nanoid
     const { nanoid } = await import("nanoid");
     const shortId = nanoid();
-    const shortUrl = `${req.protocol}://${req.get("host")}/url/${shortId}`;
+    const shortUrl = `${req.protocol}://${req.get("host")}/urls/${shortId}`;
 
     const entry = new URL({
       shortId,
       shortUrl,
-      redirectUrl: url,
+      redirectUrl: longUrl,
       visitHistory: [],
+      createdBy: req.user._id,
     });
 
     await entry.save();
-
-    const allURL = await URL.find();
-
-    return res.render("index", {
-      shortUrl,
-      allURL,
-    });
+    return res.redirect("/urls");
   } catch (err) {
-    console.error(err);
     return res.status(400).json({ error: "Unable to add this url." });
   }
 }
-
 
 async function handelRedirectShortUrl(req, res) {
   try {
@@ -50,7 +43,7 @@ async function handelRedirectShortUrl(req, res) {
     );
 
     if (!entry) {
-      return res.status(404).json({ message: "URL not found." });
+      return res.status(404).json({ message: "URL not found1." });
     }
 
     return res.redirect(entry.redirectUrl);
@@ -67,7 +60,7 @@ async function handelGetAnalytics(req, res) {
     const result = await URL.findOne({ shortId });
 
     if (!result) {
-      return res.status(404).json({ message: "URL not found." });
+      return res.status(404).json({ message: "URL not found2." });
     }
 
     return res.status(201).json({
