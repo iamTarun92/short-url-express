@@ -11,7 +11,7 @@ async function handelGenerateShortUrl(req, res) {
     // Dynamically import nanoid
     const { nanoid } = await import("nanoid");
     const shortId = nanoid();
-    const shortUrl = `${req.protocol}://${req.get("host")}/urls/${shortId}`;
+    const shortUrl = `${req.protocol}://${req.get("host")}/url/${shortId}`;
 
     const entry = new URL({
       shortId,
@@ -22,7 +22,7 @@ async function handelGenerateShortUrl(req, res) {
     });
 
     await entry.save();
-    return res.redirect("/urls");
+    return res.redirect("/url");
   } catch (err) {
     return res.status(400).json({ error: "Unable to add this url." });
   }

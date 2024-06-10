@@ -8,6 +8,7 @@ const userRoute = require("./routes/user");
 const { restrictToLoggedinUserOnly, checkAuth } = require("./middlewares/auth");
 
 const { mongoURI } = require("./config");
+const { handelRedirectShortUrl } = require("./controllers/url");
 
 const app = express();
 const port = 3000;
@@ -27,8 +28,9 @@ app.use(cookieParser());
 
 // Routes
 app.use("/", checkAuth, staticRoute);
-app.use("/urls", restrictToLoggedinUserOnly, urlRoute);
+app.use("/url", restrictToLoggedinUserOnly, urlRoute);
 app.use("/user", userRoute);
+app.get("/:shortId", handelRedirectShortUrl);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

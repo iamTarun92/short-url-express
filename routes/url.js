@@ -13,7 +13,6 @@ router
     const allURL = await URL.find({ createdBy: req.user._id });
     res.render("urls", { allURL });
   })
-  .get("/:shortId", handelRedirectShortUrl)
   .get("/analytics/:shortId", handelGetAnalytics)
   .post("/shorten", handelGenerateShortUrl);
 

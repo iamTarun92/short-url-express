@@ -18,7 +18,7 @@
         <% allURL.forEach((url,index)=>{ %>
         <tr>
           <td><%= url.visitHistory.length %></td>
-          <td><a href="/urls/<%= url.shortId %>"><%= url.shortId %></a></td>
+          <td><a href="/url/<%= url.shortId %>"><%= url.shortId %></a></td>
           <td><%= url.redirectUrl %></td>
         </tr>
         <% }) %>
