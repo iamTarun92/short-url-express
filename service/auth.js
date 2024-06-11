@@ -3,9 +3,9 @@ const privateKey = "12345!@#$%";
 // const sessionIdToUserMap = new Map();
 
 async function setUser(user) {
-  const { _id, email } = user;
+  const { _id, email, role } = user;
   // sessionIdToUserMap.set(id, user);
-  return jwt.sign({ _id, email }, privateKey);
+  return jwt.sign({ _id, email,role }, privateKey);
 }
 
 function getUser(token) {

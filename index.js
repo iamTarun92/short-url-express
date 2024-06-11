@@ -5,7 +5,12 @@ const { connectMongoDb } = require("./connection");
 const urlRoute = require("./routes/url");
 const staticRoute = require("./routes/staticRouter");
 const userRoute = require("./routes/user");
-const { restrictToLoggedinUserOnly, checkAuth } = require("./middlewares/auth");
+const {
+  restrictToLoggedinUserOnly,
+  checkAuth,
+  checkForAuthentication,
+  restrictTo,
+} = require("./middlewares/auth");
 
 const { mongoURI } = require("./config");
 const { handelRedirectShortUrl } = require("./controllers/url");
@@ -26,10 +31,11 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(checkForAuthentication);
 
 // Routes
-app.use("/", checkAuth, staticRoute);
-app.use("/url", restrictToLoggedinUserOnly, urlRoute);
+app.use("/", staticRoute);
+app.use("/url", restrictTo(["normal"]), urlRoute);
 app.use("/user", userRoute);
 app.get("/:shortId", async (req, res) => {
   try {

@@ -32,9 +32,9 @@ async function handleUserLogin(req, res) {
 
     // const sessionId = uuidv4();
     const token = await setUser(user);
-    // res.cookie("token", token, { httpOnly: true }); // Set the token as an HTTP-only cookie
-    // return res.redirect("/");
-    return res.json({ token });
+    res.cookie("token", token, { httpOnly: true }); // Set the token as an HTTP-only cookie
+    return res.redirect("/");
+    // return res.json({ token });
   } catch (error) {
     console.error("Login error:", error);
     return res.status(500).send("Internal Server Error");

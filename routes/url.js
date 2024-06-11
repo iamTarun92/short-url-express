@@ -9,7 +9,6 @@ const router = express.Router();
 
 router
   .get("/", async (req, res) => {
-    if (!req.user) return res.redirect("/login");
     const allURL = await URL.find({ createdBy: req.user._id });
     res.render("urls", { allURL });
   })
