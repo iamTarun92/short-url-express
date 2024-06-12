@@ -18,7 +18,6 @@ function restrictTo(roles=[]) {
 }
 
 async function restrictToLoggedinUserOnly(req, res, next) {
-  // const token = req.cookies?.token;
   const token = req.headers["authorization"].split("Bearer ")[1];
   if (!token) return res.redirect("/login");
   const user = getUser(token);

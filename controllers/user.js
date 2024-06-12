@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const { setUser } = require("../service/auth");
@@ -30,11 +29,9 @@ async function handleUserLogin(req, res) {
       });
     }
 
-    // const sessionId = uuidv4();
     const token = await setUser(user);
-    res.cookie("token", token, { httpOnly: true }); // Set the token as an HTTP-only cookie
+    res.cookie("token", token, { httpOnly: true });
     return res.redirect("/");
-    // return res.json({ token });
   } catch (error) {
     console.error("Login error:", error);
     return res.status(500).send("Internal Server Error");

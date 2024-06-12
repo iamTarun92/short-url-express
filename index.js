@@ -5,12 +5,7 @@ const { connectMongoDb } = require("./connection");
 const urlRoute = require("./routes/url");
 const staticRoute = require("./routes/staticRouter");
 const userRoute = require("./routes/user");
-const {
-  restrictToLoggedinUserOnly,
-  checkAuth,
-  checkForAuthentication,
-  restrictTo,
-} = require("./middlewares/auth");
+const { checkForAuthentication, restrictTo } = require("./middlewares/auth");
 
 const { mongoURI } = require("./config");
 const { handelRedirectShortUrl } = require("./controllers/url");
@@ -35,7 +30,7 @@ app.use(checkForAuthentication);
 
 // Routes
 app.use("/", staticRoute);
-app.use("/url", restrictTo(["normal"]), urlRoute);
+app.use("/url", restrictTo(["normal","admin"]), urlRoute);
 app.use("/user", userRoute);
 app.get("/:shortId", async (req, res) => {
   try {

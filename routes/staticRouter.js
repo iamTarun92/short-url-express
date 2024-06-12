@@ -1,8 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const URL = require("../models/url");
+const { restrictTo } = require("../middlewares/auth");
 
 router.get("/", (req, res) => {
   res.render("index");
+});
+
+router.get("/admin/urls", restrictTo(["admin"]), async (req, res) => {
+  const allURL = await URL.find();
+  res.render("urls", { allURL });
 });
 
 router.get("/register", (req, res) => {
